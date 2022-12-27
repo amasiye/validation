@@ -10,7 +10,7 @@ Welcome to the AssegaiPHP validation package! This package is designed to provid
 To install this package, run the following command in your project's root directory:
 
 ```bash
-composer require assegai/validation
+composer require assegaiphp/validation
 ```
 
 # Basic Usage
