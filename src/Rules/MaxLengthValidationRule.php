@@ -11,7 +11,7 @@ use Assegai\Validation\Interfaces\IValidationRule;
 readonly class MaxLengthValidationRule implements IValidationRule
 {
   /**
-   * Constructs the MaxLengthRule
+   * Constructs the MaxLengthValidationRule
    * 
    * @param int $maxLength The maximum length.
    */
