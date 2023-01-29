@@ -7,12 +7,14 @@
         "assegaiphp/core": ">=0.3.2"
     },
     "require-dev": {
-        "codeception/codeception": "^5.0"
+        "codeception/codeception": "^5.0",
+        "codeception/module-phpbrowser": "*",
+        "codeception/module-asserts": "*"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Assegaiphp\\Validation\\": "src/"
+            "Assegai\\Validation\\": "src/"
         }
     },
     "authors": [
