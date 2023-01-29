@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "95437022a42512337f7b6dd112370157",
+    "content-hash": "6311eb368b3bb390af70879d054e4640",
     "packages": [
         {
             "name": "assegaiphp/core",
@@ -3788,7 +3788,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "php": ">=8.2"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }

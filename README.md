@@ -1,19 +1,21 @@
-<div align="center">
-    <a href="https://assegai.ml/" target="blank"><img src="https://assegai.ml/images/logo-small.png" width="492" alt="Assegai Logo"></a>
+<div align="center" style="padding-bottom: 48px">
+    <a href="https://assegaiphp.com/" target="blank"><img src="https://assegaiphp.com/images/logos/logo-cropped.png" width="200" alt="Assegai Logo"></a>
 </div>
 
-<p style="display: flex; justify-content: center; text-align: center">A progressive PHP framework for building efficient and scalable server-side applications.</p>
+<p style="text-align: center">A progressive <a href="https://php.net">PHP</a> framework for building effecient and scalable server-side applications.</p>
+
+# AssegaiPHP Validation
 
 Welcome to the AssegaiPHP validation package! This package is designed to provide a simple and easy-to-use solution for validating data in your AssegaiPHP projects.
 
-# Installation
+## Installation
 To install this package, run the following command in your project's root directory:
 
 ```bash
-composer require assegai/validation
+composer require assegaiphp/validation
 ```
 
-# Basic Usage
+## Basic Usage
 
 To use this package, simply import the Assegai\Validation\Validator class and create a new instance. You can then use the validate() method to check if a value or array of values meet the specified criteria.
 
@@ -26,7 +28,7 @@ $isValid = $validator->validate($value, 'required|email');
 
 The second argument to the validate() method is a string containing the validation rules to apply, separated by the | character. In the example above, the required and email rules are applied.
 
-# Available Rules
+## Available Rules
 
 This package comes with a number of built-in validation rules, including:
 
@@ -40,7 +42,7 @@ This package comes with a number of built-in validation rules, including:
 
 You can also create custom validation rules by extending the Assegai\Validation\Rule class and implementing the validate() method.
 
-# Error Handling
+## Error Handling
 
 If the validate() method returns false, you can use the getErrors() method to retrieve an array of error messages.
 
@@ -52,6 +54,6 @@ if (!$isValid)
 }
 ```
 
-# Further Reading
+## Further Reading
 
 For more information on how to use this package, please see the full [documentation](https://assegaiphp.com/gudie/techniques/validation). Thank you for using the AssegaiPHP.
