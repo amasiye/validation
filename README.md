@@ -34,8 +34,10 @@ This package comes with a number of built-in validation rules, including:
 
 - `required`: value must be present
 - `email`: value must be a valid email address
-- `min:n`: value must be at least n characters long
-- `max:n`: value must be no more than n characters long
+- `minLength:n`: value must be at least n characters long
+- `maxLength:n`: value must be no more than n characters long
+- `min:n`: value must be greater than or equal n
+- `max:n`: value must be less than or equal to n
 - `numeric`: value must be a number
 - `integer`: value must be an integer
 - `between:n,m`: value must be between n and m (inclusive)
