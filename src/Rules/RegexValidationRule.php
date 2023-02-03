@@ -17,7 +17,19 @@ class RegexValidationRule implements IValidationRule
    */
   public function passes(mixed $value): bool
   {
-    return (bool)preg_match("/$this->pattern/", $value);
+    $pattern = $this->pattern;
+
+    if (!str_starts_with($pattern, '/'))
+    {
+      $pattern = '/' . $pattern;
+    }
+
+    if (!str_ends_with($pattern, '/') && !preg_match('/\/[gim]+$/', $pattern))
+    {
+      $pattern .= '/';
+    }
+
+    return (bool)preg_match($pattern, $value);
   }
 
   /**

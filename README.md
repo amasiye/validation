@@ -32,21 +32,26 @@ The second argument to the validate() method is a string containing the validati
 
 This package comes with a number of built-in validation rules, including:
 
-- `required`: value must be present
-- `email`: value must be a valid email address
-- `url`: value must be a valid url
-- `minLength:n`: value must be at least n characters long
-- `maxLength:n`: value must be no more than n characters long
-- `min:n`: value does not exceed a maximum value, n
-- `max:n`: value is at least a certain value, n
-- `between:n,m`: value must be between n and m (inclusive)
-- `numeric`: value must be a number
-- `integer`: value must be an integer
-- `string`: value must be an integer
 - `alpha`: value must contain only alphabetic characters
 - `alnum`: value must contain only alphanumeric characters
+- `between:n,m`: value must be between n and m (inclusive)
+- `domain`: value must be a valid domain name
+- `email`: value must be a valid email address
+- `equalTo:n`: value must be equal to n
+- `float`: value must be a floating point number
 - `inlist:l`: value is in a specific list of allowed values
+- `integer`: value must be an integer
+- `maxLength:n`: value must be no more than n characters long
+- `max:n`: value does not exceed a maximum value, n
+- `minLength:n`: value must be at least n characters long
+- `min:n`: value is at least a certain value, n
+- `notEqualTo:n`: value must not be equal to n
 - `notinlist:l`: value is not in a specific list of disallowed values
+- `numeric`: value must be a number
+- `regex:n`: value must match the given regex pattern n
+- `required`: value must be present
+- `string`: value must be a string
+- `url`: value must be a valid url
 
 You can also create custom validation rules by extending the Assegai\Validation\Rule class and implementing the validate() method.
 
