@@ -34,11 +34,19 @@ This package comes with a number of built-in validation rules, including:
 
 - `required`: value must be present
 - `email`: value must be a valid email address
-- `min:n`: value must be at least n characters long
-- `max:n`: value must be no more than n characters long
+- `url`: value must be a valid url
+- `minLength:n`: value must be at least n characters long
+- `maxLength:n`: value must be no more than n characters long
+- `min:n`: value does not exceed a maximum value, n
+- `max:n`: value is at least a certain value, n
+- `between:n,m`: value must be between n and m (inclusive)
 - `numeric`: value must be a number
 - `integer`: value must be an integer
-- `between:n,m`: value must be between n and m (inclusive)
+- `string`: value must be an integer
+- `alpha`: value must contain only alphabetic characters
+- `alnum`: value must contain only alphanumeric characters
+- `inlist:l`: value is in a specific list of allowed values
+- `notinlist:l`: value is not in a specific list of disallowed values
 
 You can also create custom validation rules by extending the Assegai\Validation\Rule class and implementing the validate() method.
 

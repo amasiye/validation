@@ -2,7 +2,7 @@
 
 namespace Assegai\Validation\Interfaces;
 
-interface IRule
+interface IValidationRule
 {
   /**
    * Returns a boolean indicating whether the value passes the rule. 
