@@ -9,6 +9,13 @@ use Assegai\Validation\Interfaces\IValidationRule;
  */
 class RequiredValidationRule implements IValidationRule
 {
+  /**
+   * Constructs a RequiredValidationRule
+   * @param string $errorMessage
+   */
+  public function __construct(protected string $errorMessage = "Input is required and must not be empty")
+  {
+  }
 
   /**
    * @inheritDoc
@@ -16,6 +23,7 @@ class RequiredValidationRule implements IValidationRule
   public function passes(mixed $value): bool
   {
     return match (true) {
+      is_array($value),
       is_string($value) => !empty($value),
       default => !is_null($value)
     };
@@ -26,6 +34,6 @@ class RequiredValidationRule implements IValidationRule
    */
   public function getErrorMessage(): string
   {
-    return "Input must not be empty";
+    return $this->errorMessage;
   }
 }
