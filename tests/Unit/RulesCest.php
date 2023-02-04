@@ -7,6 +7,7 @@ use Assegai\Validation\Mock\MockStringable;
 use Assegai\Validation\Mock\MockText;
 use Assegai\Validation\Rules\AlphaNumericValidationRule;
 use Assegai\Validation\Rules\AlphaValidationRule;
+use Assegai\Validation\Rules\AsciiValidationRule;
 use Assegai\Validation\Rules\BetweenValidationRule;
 use Assegai\Validation\Rules\DomainNameValidationRule;
 use Assegai\Validation\Rules\EmailValidationRule;
@@ -26,7 +27,6 @@ use Assegai\Validation\Rules\RequiredValidationRule;
 use Assegai\Validation\Rules\StringValidationRule;
 use Assegai\Validation\Rules\URLValidationRule;
 use Tests\Support\UnitTester;
-use function PHPUnit\Framework\assertTrue;
 
 class RulesCest
 {
@@ -50,6 +50,23 @@ class RulesCest
 
     $I->assertTrue($rule->passes('aaafdsf1212fsafasd'));
     $I->assertFalse($rule->passes('wef8h23g89##fasdfas'));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheAsciiValidationRule(UnitTester $I): void
+  {
+    $rule = new AsciiValidationRule();
+
+    $I->assertTrue($rule->passes('Hello World!'));
+    $I->assertTrue($rule->passes('Welcome to the world of ASCII validation.'));
+    $I->assertTrue($rule->passes('1234567890'));
+    $I->assertTrue($rule->passes('!@#$%^&*()'));
+    $I->assertTrue($rule->passes('abcdefghijklmnopqrstuvwxyz'));
+    $I->assertTrue($rule->passes('ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
+    $I->assertFalse($rule->passes('áéíóúñäëïöüÿ'));
+    $I->assertTrue($rule->passes('The quick brown fox jumps over the lazy dog.'));
+    $I->assertFalse($rule->passes('This is a string with a mix of ASCII and non-ASCII characters: ¡™£¢∞§¶•ªº–≠.'));
+    $I->assertTrue($rule->passes('!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
