@@ -6,7 +6,7 @@
         "test:unit": "codecept run Unit"
     },
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "arubacao/tld-checker": "^1.2",
         "giggsey/libphonenumber-for-php": "^8.13"
     },

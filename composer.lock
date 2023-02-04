@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "48c4d615d35bc1c123bbaeefc2817b77",
+    "content-hash": "1a7998c88aa9f918352c35948f90ce42",
     "packages": [
         {
             "name": "arubacao/tld-checker",
@@ -1734,16 +1734,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.0.1",
+            "version": "10.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e2aa0bba46b3d913be20921e88e5a6f9d5cfc9b5"
+                "reference": "140897d407ce1c9e0b6b5ced8663d442af7c5560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e2aa0bba46b3d913be20921e88e5a6f9d5cfc9b5",
-                "reference": "e2aa0bba46b3d913be20921e88e5a6f9d5cfc9b5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/140897d407ce1c9e0b6b5ced8663d442af7c5560",
+                "reference": "140897d407ce1c9e0b6b5ced8663d442af7c5560",
                 "shasum": ""
             },
             "require": {
@@ -1814,7 +1814,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.1"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.0.3"
             },
             "funding": [
                 {
@@ -1830,7 +1830,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-03T13:36:13+00:00"
+            "time": "2023-02-04T13:39:07+00:00"
         },
         {
             "name": "psr/container",
@@ -4355,7 +4355,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2"
+        "php": "^8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
