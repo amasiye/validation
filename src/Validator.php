@@ -28,7 +28,7 @@ use ReflectionException;
 class Validator
 {
   /**
-   * @var ValidationError[] $errors
+   * @var string[] $errors
    */
   protected array $errors = [];
 
@@ -79,8 +79,7 @@ class Validator
    */
   public function addAllRules(array $rules): void
   {
-    foreach ($rules as $name => $rule)
-    {
+    foreach ($rules as $name => $rule) {
       $this->addRule($name, $rule);
     }
   }
@@ -100,22 +99,18 @@ class Validator
 
     $ruleString = $rules;
     $rules = explode('|', $rules);
-    foreach ($rules as $rule)
-    {
+    foreach ($rules as $rule) {
       $ruleTokens = explode(':', $rule);
-      if (!$ruleTokens)
-      {
+      if (!$ruleTokens) {
         continue;
       }
       $ruleName = $ruleTokens[0];
       $ruleArgs = (count($ruleTokens) > 1) ? array_slice($ruleTokens, 1) : [];
 
-      if (isset($this->rules[$ruleName]))
-      {
+      if (isset($this->rules[$ruleName])) {
         $ruleToken = $this->rules[$ruleName];
 
-        if (is_subclass_of($ruleToken, IValidationRule::class))
-        {
+        if (is_subclass_of($ruleToken, IValidationRule::class)) {
           $ruleReflection = new ReflectionClass($this->rules[$ruleName]);
           /** @var IValidationRule $ruleInstance */
           $ruleInstance = $ruleReflection->newInstanceArgs($ruleArgs);
@@ -126,10 +121,8 @@ class Validator
     }
 
     /** @var IValidationRule $rule */
-    foreach ($effectiveRules as $field => $rule)
-    {
-      if (!$rule->passes($value))
-      {
+    foreach ($effectiveRules as $field => $rule) {
+      if (!$rule->passes($value)) {
         $this->errors[$field] = $rule->getErrorMessage();
       }
     }
@@ -149,7 +142,7 @@ class Validator
 
   /**
    * Indicates whether any validation rule failed.
-   * 
+   *
    * @return bool Returns TRUE if any rule check failed, otherwise FALSE.
    */
   public function fails(): bool
@@ -159,11 +152,25 @@ class Validator
 
   /**
    * Returns a list of validation errors that were encountered during the validation process.
-   * 
-   * @return ValidationError[] Returns a list of validation errors that were encountered during the validation process.
+   *
+   * @return string[] Returns a list of validation errors that were encountered during the validation process.
    */
   public function getErrors(): array
   {
     return $this->errors;
+  }
+
+  /**
+   * @param string|object $classOrObject
+   * @return bool
+   * @throws ReflectionException
+   */
+  public static function validateClass(string|object $classOrObject): bool
+  {
+    $classReflection = new ReflectionClass($classOrObject);
+
+    // TODO: Implement validateClass() method.
+
+    return false;
   }
 }
