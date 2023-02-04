@@ -20,6 +20,7 @@ use Assegai\Validation\Rules\MinValidationRule;
 use Assegai\Validation\Rules\NotEqualToValidationRule;
 use Assegai\Validation\Rules\NotInListValidationRule;
 use Assegai\Validation\Rules\NumericValidationRule;
+use Assegai\Validation\Rules\PhoneNumberValidationRule;
 use Assegai\Validation\Rules\RegexValidationRule;
 use Assegai\Validation\Rules\RequiredValidationRule;
 use Assegai\Validation\Rules\StringValidationRule;
@@ -297,6 +298,35 @@ class RulesCest
     $I->assertFalse($rule->passes($stringValue));
     $I->assertFalse($rule->passes($boolValue));
     $I->assertFalse($rule->passes($arrayValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkThePhoneNumberValidationRule(UnitTester $I): void
+  {
+    $regionCode = 'ZM';
+    $rule = new PhoneNumberValidationRule($regionCode);
+
+    $I->assertTrue($rule->passes("+260 211 000 000"));
+    $I->assertTrue($rule->passes("+260 0966 123 000"));
+    $I->assertTrue($rule->passes("+260 0977 456 000"));
+    $I->assertTrue($rule->passes("260 0955 456 000"));
+    $I->assertTrue($rule->passes("0955 456 000"));
+    $I->assertFalse($rule->passes("+1 650 253 0000"));
+
+    $regionCode = "CH";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("044 668 18 00"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
+
+    $regionCode = "US";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("+1 650 253 0000"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
+
+    $regionCode = "GB";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("0161 496 0000"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
