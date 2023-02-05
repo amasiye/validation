@@ -14,6 +14,7 @@ use Assegai\Validation\Rules\EmailValidationRule;
 use Assegai\Validation\Rules\EqualToValidationRule;
 use Assegai\Validation\Rules\InListValidationRule;
 use Assegai\Validation\Rules\IntegerValidationRule;
+use Assegai\Validation\Rules\JsonValidationRule;
 use Assegai\Validation\Rules\MaxLengthValidationRule;
 use Assegai\Validation\Rules\MaxValidationRule;
 use Assegai\Validation\Rules\MinLengthValidationRule;
@@ -152,6 +153,23 @@ class RulesCest
     $I->assertFalse($rule->passes($boolValue));
     $I->assertFalse($rule->passes($arrayValue));
     $I->assertFalse($rule->passes($objectValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheJsonValidationRule(UnitTester $I): void
+  {
+    $rule = new JsonValidationRule();
+
+    $I->assertTrue($rule->passes('{ "test": { "foo": "bar" } }'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{}'));
+    $I->assertTrue($rule->passes('{"name": null, "age": 30, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{"person": {"name": "John", "age": 30}, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": ["New York", "London", "Paris"]}'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": ["New York", 123, true]}'));
+    $I->assertFalse($rule->passes('{{"name": "John", "age": 30, "city": "New York"}!!'));
+    $I->assertFalse($rule->passes('{ "": "": "" } }'));
+    $I->assertFalse($rule->passes('{name: "John", age: 30, city: "New York"}'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
