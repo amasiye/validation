@@ -3,6 +3,7 @@
 
 namespace Tests\Unit;
 
+use Assegai\Validation\Mock\MockEnum;
 use Assegai\Validation\Mock\MockStringable;
 use Assegai\Validation\Mock\MockText;
 use Assegai\Validation\Rules\AlphaNumericValidationRule;
@@ -13,6 +14,7 @@ use Assegai\Validation\Rules\BetweenValidationRule;
 use Assegai\Validation\Rules\DateValidationRule;
 use Assegai\Validation\Rules\DomainNameValidationRule;
 use Assegai\Validation\Rules\EmailValidationRule;
+use Assegai\Validation\Rules\EnumValidationRule;
 use Assegai\Validation\Rules\EqualToValidationRule;
 use Assegai\Validation\Rules\InListValidationRule;
 use Assegai\Validation\Rules\IntegerValidationRule;
@@ -151,6 +153,15 @@ class RulesCest
     $I->assertTrue($rule->passes($validEmail));
     $I->assertFalse($rule->passes($invalidEmail));
     $I->assertFalse($rule->passes($emptyEmail));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheEnumValidationRule(UnitTester $I): void
+  {
+    $rule = new EnumValidationRule(MockEnum::class);
+    $I->assertTrue($rule->passes(MockEnum::A));
+    $I->assertTrue($rule->passes('B'));
+    $I->assertFalse($rule->passes('G'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
