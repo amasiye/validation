@@ -7,6 +7,7 @@ use Assegai\Validation\Mock\MockStringable;
 use Assegai\Validation\Mock\MockText;
 use Assegai\Validation\Rules\AlphaNumericValidationRule;
 use Assegai\Validation\Rules\AlphaValidationRule;
+use Assegai\Validation\Rules\ArrayValidationRule;
 use Assegai\Validation\Rules\AsciiValidationRule;
 use Assegai\Validation\Rules\BetweenValidationRule;
 use Assegai\Validation\Rules\DateValidationRule;
@@ -52,6 +53,20 @@ class RulesCest
 
     $I->assertTrue($rule->passes('aaafdsf1212fsafasd'));
     $I->assertFalse($rule->passes('wef8h23g89##fasdfas'));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheArrayValidationRule(UnitTester $I): void
+  {
+    $rule = new ArrayValidationRule();
+
+    $I->assertTrue($rule->passes([1, 2, 3, 4, 5]));
+    $I->assertTrue($rule->passes(['a', 'b', 'c']));
+    $I->assertTrue($rule->passes([]));
+    $I->assertTrue($rule->passes([1, 'b', [3, 4]]));
+    $I->assertFalse($rule->passes('not an array'));
+    $I->assertFalse($rule->passes(123));
+    $I->assertFalse($rule->passes((object)['key1' => 'value1', 'key2' => 'value2']));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
