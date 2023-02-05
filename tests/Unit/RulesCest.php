@@ -9,6 +9,7 @@ use Assegai\Validation\Rules\AlphaNumericValidationRule;
 use Assegai\Validation\Rules\AlphaValidationRule;
 use Assegai\Validation\Rules\AsciiValidationRule;
 use Assegai\Validation\Rules\BetweenValidationRule;
+use Assegai\Validation\Rules\DateValidationRule;
 use Assegai\Validation\Rules\DomainNameValidationRule;
 use Assegai\Validation\Rules\EmailValidationRule;
 use Assegai\Validation\Rules\EqualToValidationRule;
@@ -80,6 +81,32 @@ class RulesCest
     $I->assertTrue($rule->passes(5));
     $I->assertFalse($rule->passes(1));
     $I->assertFalse($rule->passes(11));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheDateValidationRule(UnitTester $I): void
+  {
+    $rule = new DateValidationRule();
+
+    $I->assertTrue($rule->passes("2022-01-01", 'Y-m-d'));
+    $I->assertTrue($rule->passes("2022/01/01", 'Y/d/m'));
+    $I->assertTrue($rule->passes("01-01-2022", 'd-m-Y'));
+    $I->assertTrue($rule->passes("Jan 1, 2022", 'M j, Y'));
+    $I->assertTrue($rule->passes("2022-13-01", 'Y-d-m'));
+    $I->assertFalse($rule->passes("2022-01-32", 'Y-m-d'));
+    $I->assertFalse($rule->passes("2022-02-29", 'Y-m-d'));
+    $I->assertTrue($rule->passes("2020-02-29", 'Y-m-d'));
+    $I->assertTrue($rule->passes("January 1, 2022 12:00:00", 'F j, Y h:i:s'));
+    $I->assertTrue($rule->passes("2022-01-01T12:00:00Z"));
+    $I->assertTrue($rule->passes("2022-01-01T12:00:00+05:00"));
+    $I->assertFalse($rule->passes("not a date"));
+    $I->assertTrue($rule->passes(123456789));
+    $I->assertFalse($rule->passes([2022, 01, 01]));
+    $I->assertTrue($rule->passes([01, 01, 2022]));
+    $I->assertTrue($rule->passes([12, 31, 2000]));
+    $I->assertFalse($rule->passes([2, 29, 2001]));
+    $I->assertTrue($rule->passes('{"year": 2022, "month": 1, "day": 1}'));
+    $I->assertFalse($rule->passes('{"year": 2022, "month": 01, "day": 01}'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
