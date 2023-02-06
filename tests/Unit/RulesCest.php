@@ -27,6 +27,7 @@ use Assegai\Validation\Rules\MinValidationRule;
 use Assegai\Validation\Rules\NotEmptyValidationRule;
 use Assegai\Validation\Rules\NotEqualToValidationRule;
 use Assegai\Validation\Rules\NotInListValidationRule;
+use Assegai\Validation\Rules\NumberValidationRule;
 use Assegai\Validation\Rules\NumericValidationRule;
 use Assegai\Validation\Rules\PhoneNumberValidationRule;
 use Assegai\Validation\Rules\RegexValidationRule;
@@ -401,6 +402,25 @@ class RulesCest
 
     $I->assertTrue($rule->passes($validValue));
     $I->assertFalse($rule->passes($invalidValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheNumberValidationRule(UnitTester $I): void
+  {
+    $rule = new NumberValidationRule();
+    $integerValue = 1;
+    $floatValue = 11.6;
+    $numericString = '10';
+    $stringValue = 'hello assegai';
+    $boolValue = true;
+    $arrayValue = [1,2,3];
+
+    $I->assertTrue($rule->passes($integerValue));
+    $I->assertTrue($rule->passes($floatValue));
+    $I->assertFalse($rule->passes($stringValue));
+    $I->assertFalse($rule->passes($numericString));
+    $I->assertFalse($rule->passes($boolValue));
+    $I->assertFalse($rule->passes($arrayValue));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 

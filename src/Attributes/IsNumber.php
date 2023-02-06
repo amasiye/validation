@@ -2,7 +2,7 @@
 
 namespace Assegai\Validation\Attributes;
 
-use Assegai\Validation\Rules\NumericValidationRule;
+use Assegai\Validation\Rules\NumberValidationRule;
 use Attribute;
 
 /**
@@ -13,6 +13,6 @@ class IsNumber extends ValidationAttribute
 {
   public function __construct(protected object|array|null $options = null)
   {
-    $this->rule = new NumericValidationRule();
+    $this->rule = new NumberValidationRule();
   }
 }
