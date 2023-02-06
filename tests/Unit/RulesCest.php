@@ -14,6 +14,7 @@ use Assegai\Validation\Rules\BetweenValidationRule;
 use Assegai\Validation\Rules\DateValidationRule;
 use Assegai\Validation\Rules\DomainNameValidationRule;
 use Assegai\Validation\Rules\EmailValidationRule;
+use Assegai\Validation\Rules\EmptyValidationRule;
 use Assegai\Validation\Rules\EnumValidationRule;
 use Assegai\Validation\Rules\EqualToValidationRule;
 use Assegai\Validation\Rules\InListValidationRule;
@@ -153,6 +154,19 @@ class RulesCest
     $I->assertTrue($rule->passes($validEmail));
     $I->assertFalse($rule->passes($invalidEmail));
     $I->assertFalse($rule->passes($emptyEmail));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheEmptyValidationRule(UnitTester $I): void
+  {
+    $rule = new EmptyValidationRule();
+
+    $I->assertTrue($rule->passes(null));
+    $I->assertTrue($rule->passes(''));
+    $I->assertTrue($rule->passes([]));
+    $I->assertFalse($rule->passes(0));
+    $I->assertFalse($rule->passes('0'));
+    $I->assertFalse($rule->passes('null'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
