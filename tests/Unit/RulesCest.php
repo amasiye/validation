@@ -24,6 +24,7 @@ use Assegai\Validation\Rules\MaxLengthValidationRule;
 use Assegai\Validation\Rules\MaxValidationRule;
 use Assegai\Validation\Rules\MinLengthValidationRule;
 use Assegai\Validation\Rules\MinValidationRule;
+use Assegai\Validation\Rules\NotEmptyValidationRule;
 use Assegai\Validation\Rules\NotEqualToValidationRule;
 use Assegai\Validation\Rules\NotInListValidationRule;
 use Assegai\Validation\Rules\NumericValidationRule;
@@ -167,6 +168,8 @@ class RulesCest
     $I->assertFalse($rule->passes(0));
     $I->assertFalse($rule->passes('0'));
     $I->assertFalse($rule->passes('null'));
+    $I->assertFalse($rule->passes(false));
+    $I->assertFalse($rule->passes(true));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
@@ -335,6 +338,21 @@ class RulesCest
     $I->assertFalse($rule->passes($invalidStringValue));
     $I->assertFalse($rule->passes($boolValue));
     $I->assertFalse($rule->passes($objectValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheNotEmptyValidationRule(UnitTester $I): void
+  {
+    $rule = new NotEmptyValidationRule();
+
+    $I->assertTrue($rule->passes('1, 2 unbuckle my shoe'));
+    $I->assertTrue($rule->passes([1,2,3,4]));
+    $I->assertTrue($rule->passes((object)['name' => 'John Doe', 'age' => 50]));
+    $I->assertTrue($rule->passes(true));
+    $I->assertTrue($rule->passes(false));
+    $I->assertFalse($rule->passes([]));
+    $I->assertFalse($rule->passes(''));
+    $I->assertFalse($rule->passes(null));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
