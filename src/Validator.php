@@ -2,6 +2,7 @@
 
 namespace Assegai\Validation;
 
+use Assegai\Validation\Attributes\ValidationAttribute;
 use Assegai\Validation\Interfaces\IValidationRule;
 use Assegai\Validation\Rules\AlphaNumericValidationRule;
 use Assegai\Validation\Rules\AlphaValidationRule;
@@ -24,6 +25,7 @@ use Assegai\Validation\Rules\StringValidationRule;
 use Assegai\Validation\Rules\URLValidationRule;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionProperty;
 
 class Validator
 {
@@ -165,12 +167,54 @@ class Validator
    * @return bool
    * @throws ReflectionException
    */
-  public static function validateClass(string|object $classOrObject): bool
+  public static function validateClass(string|object $classOrObject, array &$errors = []): bool
   {
     $classReflection = new ReflectionClass($classOrObject);
 
-    // TODO: Implement validateClass() method.
+    foreach ($classReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property)
+    {
+      if (self::propertyHasValidationAttributes($property))
+      {
+        $errorList = [];
+        self::propertyPasses($property, $errorList);
+        $errors = array_merge($errors, $errorList);
+      }
+    }
+
+    return empty($errors);
+  }
+
+  protected static function propertyHasValidationAttributes(ReflectionProperty $property): bool
+  {
+    $attributes = $property->getAttributes();
+
+    foreach ($attributes as $attribute)
+    {
+      if (is_subclass_of($attribute->getName(), ValidationAttribute::class))
+      {
+        return true;
+      }
+    }
 
     return false;
+  }
+
+  protected static function propertyPasses(ReflectionProperty $property, array &$errors = []): bool
+  {
+    $errors = [];
+
+    foreach ($property->getAttributes() as $attribute)
+    {
+      if (is_subclass_of($attribute->getName(), ValidationAttribute::class))
+      {
+        $attributeInstance = $attribute->newInstance();
+        if (!$attributeInstance->getRule()->passes($property->getValue(new $property->class)))
+        {
+          $errors[] = $attributeInstance->getRule()->getErrorMessage();
+        }
+      }
+    }
+
+    return empty($errors);
   }
 }
