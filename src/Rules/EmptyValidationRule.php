@@ -17,7 +17,7 @@ class EmptyValidationRule implements IValidationRule
    */
   public function passes(mixed $value): bool
   {
-    return !isset($value) || (!is_numeric($value) && empty($value));
+    return !isset($value) || (!is_bool($value) && !is_numeric($value) && empty($value));
   }
 
   /**
