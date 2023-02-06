@@ -3,29 +3,38 @@
 
 namespace Tests\Unit;
 
+use Assegai\Validation\Mock\MockEnum;
 use Assegai\Validation\Mock\MockStringable;
 use Assegai\Validation\Mock\MockText;
 use Assegai\Validation\Rules\AlphaNumericValidationRule;
 use Assegai\Validation\Rules\AlphaValidationRule;
+use Assegai\Validation\Rules\ArrayValidationRule;
+use Assegai\Validation\Rules\AsciiValidationRule;
 use Assegai\Validation\Rules\BetweenValidationRule;
+use Assegai\Validation\Rules\DateValidationRule;
 use Assegai\Validation\Rules\DomainNameValidationRule;
 use Assegai\Validation\Rules\EmailValidationRule;
+use Assegai\Validation\Rules\EmptyValidationRule;
+use Assegai\Validation\Rules\EnumValidationRule;
 use Assegai\Validation\Rules\EqualToValidationRule;
 use Assegai\Validation\Rules\InListValidationRule;
 use Assegai\Validation\Rules\IntegerValidationRule;
+use Assegai\Validation\Rules\JsonValidationRule;
 use Assegai\Validation\Rules\MaxLengthValidationRule;
 use Assegai\Validation\Rules\MaxValidationRule;
 use Assegai\Validation\Rules\MinLengthValidationRule;
 use Assegai\Validation\Rules\MinValidationRule;
+use Assegai\Validation\Rules\NotEmptyValidationRule;
 use Assegai\Validation\Rules\NotEqualToValidationRule;
 use Assegai\Validation\Rules\NotInListValidationRule;
+use Assegai\Validation\Rules\NumberValidationRule;
 use Assegai\Validation\Rules\NumericValidationRule;
+use Assegai\Validation\Rules\PhoneNumberValidationRule;
 use Assegai\Validation\Rules\RegexValidationRule;
 use Assegai\Validation\Rules\RequiredValidationRule;
 use Assegai\Validation\Rules\StringValidationRule;
 use Assegai\Validation\Rules\URLValidationRule;
 use Tests\Support\UnitTester;
-use function PHPUnit\Framework\assertTrue;
 
 class RulesCest
 {
@@ -52,6 +61,37 @@ class RulesCest
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
+  public function checkTheArrayValidationRule(UnitTester $I): void
+  {
+    $rule = new ArrayValidationRule();
+
+    $I->assertTrue($rule->passes([1, 2, 3, 4, 5]));
+    $I->assertTrue($rule->passes(['a', 'b', 'c']));
+    $I->assertTrue($rule->passes([]));
+    $I->assertTrue($rule->passes([1, 'b', [3, 4]]));
+    $I->assertFalse($rule->passes('not an array'));
+    $I->assertFalse($rule->passes(123));
+    $I->assertFalse($rule->passes((object)['key1' => 'value1', 'key2' => 'value2']));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheAsciiValidationRule(UnitTester $I): void
+  {
+    $rule = new AsciiValidationRule();
+
+    $I->assertTrue($rule->passes('Hello World!'));
+    $I->assertTrue($rule->passes('Welcome to the world of ASCII validation.'));
+    $I->assertTrue($rule->passes('1234567890'));
+    $I->assertTrue($rule->passes('!@#$%^&*()'));
+    $I->assertTrue($rule->passes('abcdefghijklmnopqrstuvwxyz'));
+    $I->assertTrue($rule->passes('ABCDEFGHIJKLMNOPQRSTUVWXYZ'));
+    $I->assertFalse($rule->passes('áéíóúñäëïöüÿ'));
+    $I->assertTrue($rule->passes('The quick brown fox jumps over the lazy dog.'));
+    $I->assertFalse($rule->passes('This is a string with a mix of ASCII and non-ASCII characters: ¡™£¢∞§¶•ªº–≠.'));
+    $I->assertTrue($rule->passes('!"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~'));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
   public function checkTheBetweenValidationRule(UnitTester $I): void
   {
     $min = 1;
@@ -61,6 +101,32 @@ class RulesCest
     $I->assertTrue($rule->passes(5));
     $I->assertFalse($rule->passes(1));
     $I->assertFalse($rule->passes(11));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheDateValidationRule(UnitTester $I): void
+  {
+    $rule = new DateValidationRule();
+
+    $I->assertTrue($rule->passes("2022-01-01", 'Y-m-d'));
+    $I->assertTrue($rule->passes("2022/01/01", 'Y/d/m'));
+    $I->assertTrue($rule->passes("01-01-2022", 'd-m-Y'));
+    $I->assertTrue($rule->passes("Jan 1, 2022", 'M j, Y'));
+    $I->assertTrue($rule->passes("2022-13-01", 'Y-d-m'));
+    $I->assertFalse($rule->passes("2022-01-32", 'Y-m-d'));
+    $I->assertFalse($rule->passes("2022-02-29", 'Y-m-d'));
+    $I->assertTrue($rule->passes("2020-02-29", 'Y-m-d'));
+    $I->assertTrue($rule->passes("January 1, 2022 12:00:00", 'F j, Y h:i:s'));
+    $I->assertTrue($rule->passes("2022-01-01T12:00:00Z"));
+    $I->assertTrue($rule->passes("2022-01-01T12:00:00+05:00"));
+    $I->assertFalse($rule->passes("not a date"));
+    $I->assertTrue($rule->passes(123456789));
+    $I->assertFalse($rule->passes([2022, 01, 01]));
+    $I->assertTrue($rule->passes([01, 01, 2022]));
+    $I->assertTrue($rule->passes([12, 31, 2000]));
+    $I->assertFalse($rule->passes([2, 29, 2001]));
+    $I->assertTrue($rule->passes('{"year": 2022, "month": 1, "day": 1}'));
+    $I->assertFalse($rule->passes('{"year": 2022, "month": 01, "day": 01}'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
@@ -90,6 +156,30 @@ class RulesCest
     $I->assertTrue($rule->passes($validEmail));
     $I->assertFalse($rule->passes($invalidEmail));
     $I->assertFalse($rule->passes($emptyEmail));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheEmptyValidationRule(UnitTester $I): void
+  {
+    $rule = new EmptyValidationRule();
+
+    $I->assertTrue($rule->passes(null));
+    $I->assertTrue($rule->passes(''));
+    $I->assertTrue($rule->passes([]));
+    $I->assertFalse($rule->passes(0));
+    $I->assertFalse($rule->passes('0'));
+    $I->assertFalse($rule->passes('null'));
+    $I->assertFalse($rule->passes(false));
+    $I->assertFalse($rule->passes(true));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheEnumValidationRule(UnitTester $I): void
+  {
+    $rule = new EnumValidationRule(MockEnum::class);
+    $I->assertTrue($rule->passes(MockEnum::A));
+    $I->assertTrue($rule->passes('B'));
+    $I->assertFalse($rule->passes('G'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
@@ -134,6 +224,23 @@ class RulesCest
     $I->assertFalse($rule->passes($boolValue));
     $I->assertFalse($rule->passes($arrayValue));
     $I->assertFalse($rule->passes($objectValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkTheJsonValidationRule(UnitTester $I): void
+  {
+    $rule = new JsonValidationRule();
+
+    $I->assertTrue($rule->passes('{ "test": { "foo": "bar" } }'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{}'));
+    $I->assertTrue($rule->passes('{"name": null, "age": 30, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{"person": {"name": "John", "age": 30}, "city": "New York"}'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": ["New York", "London", "Paris"]}'));
+    $I->assertTrue($rule->passes('{"name": "John", "age": 30, "city": ["New York", 123, true]}'));
+    $I->assertFalse($rule->passes('{{"name": "John", "age": 30, "city": "New York"}!!'));
+    $I->assertFalse($rule->passes('{ "": "": "" } }'));
+    $I->assertFalse($rule->passes('{name: "John", age: 30, city: "New York"}'));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
@@ -235,6 +342,21 @@ class RulesCest
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
+  public function checkTheNotEmptyValidationRule(UnitTester $I): void
+  {
+    $rule = new NotEmptyValidationRule();
+
+    $I->assertTrue($rule->passes('1, 2 unbuckle my shoe'));
+    $I->assertTrue($rule->passes([1,2,3,4]));
+    $I->assertTrue($rule->passes((object)['name' => 'John Doe', 'age' => 50]));
+    $I->assertTrue($rule->passes(true));
+    $I->assertTrue($rule->passes(false));
+    $I->assertFalse($rule->passes([]));
+    $I->assertFalse($rule->passes(''));
+    $I->assertFalse($rule->passes(null));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
   public function checkTheNotEqualToValidationRule(UnitTester $I): void
   {
     $stringTarget = 'I am the target';
@@ -283,6 +405,25 @@ class RulesCest
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 
+  public function checkTheNumberValidationRule(UnitTester $I): void
+  {
+    $rule = new NumberValidationRule();
+    $integerValue = 1;
+    $floatValue = 11.6;
+    $numericString = '10';
+    $stringValue = 'hello assegai';
+    $boolValue = true;
+    $arrayValue = [1,2,3];
+
+    $I->assertTrue($rule->passes($integerValue));
+    $I->assertTrue($rule->passes($floatValue));
+    $I->assertFalse($rule->passes($stringValue));
+    $I->assertFalse($rule->passes($numericString));
+    $I->assertFalse($rule->passes($boolValue));
+    $I->assertFalse($rule->passes($arrayValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
   public function checkTheNumericValidationRule(UnitTester $I): void
   {
     $rule = new NumericValidationRule();
@@ -297,6 +438,35 @@ class RulesCest
     $I->assertFalse($rule->passes($stringValue));
     $I->assertFalse($rule->passes($boolValue));
     $I->assertFalse($rule->passes($arrayValue));
+    $I->assertNotEmpty($rule->getErrorMessage());
+  }
+
+  public function checkThePhoneNumberValidationRule(UnitTester $I): void
+  {
+    $regionCode = 'ZM';
+    $rule = new PhoneNumberValidationRule($regionCode);
+
+    $I->assertTrue($rule->passes("+260 211 000 000"));
+    $I->assertTrue($rule->passes("+260 0966 123 000"));
+    $I->assertTrue($rule->passes("+260 0977 456 000"));
+    $I->assertTrue($rule->passes("260 0955 456 000"));
+    $I->assertTrue($rule->passes("0955 456 000"));
+    $I->assertFalse($rule->passes("+1 650 253 0000"));
+
+    $regionCode = "CH";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("044 668 18 00"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
+
+    $regionCode = "US";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("+1 650 253 0000"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
+
+    $regionCode = "GB";
+    $rule = new PhoneNumberValidationRule($regionCode);
+    $I->assertTrue($rule->passes("0161 496 0000"));
+    $I->assertFalse($rule->passes("+260 211 000 000"));
     $I->assertNotEmpty($rule->getErrorMessage());
   }
 

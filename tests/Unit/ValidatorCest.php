@@ -3,6 +3,10 @@
 
 namespace Tests\Unit;
 
+use Assegai\Validation\Mock\IncompleteInvalidMockDTO;
+use Assegai\Validation\Mock\IncompleteValidMockDto;
+use Assegai\Validation\Mock\InvalidMockDto;
+use Assegai\Validation\Mock\ValidMockDto;
 use Assegai\Validation\Validator;
 use Tests\Support\UnitTester;
 
@@ -25,6 +29,19 @@ class ValidatorCest
 
     $this->validator = new Validator();
     $I->assertTrue($this->validator->validate($value, 'maxLength:100'));
+  }
+
+  public function checkTheValidateclassMethod(UnitTester $I): void
+  {
+    $validDto = new ValidMockDto();
+    $invalidDto = new InvalidMockDto();
+    $incompleteValidDto = new IncompleteValidMockDto();
+    $incompleteInvalidDto = new IncompleteInvalidMockDTO();
+
+    $I->assertTrue($this->validator->validateClass($validDto));
+    $I->assertTrue($this->validator->validateClass($incompleteValidDto));
+    $I->assertFalse($this->validator->validateClass($invalidDto));
+    $I->assertFalse($this->validator->validateClass($incompleteInvalidDto));
   }
 
   public function checkThePassesMethod(UnitTester $I): void
