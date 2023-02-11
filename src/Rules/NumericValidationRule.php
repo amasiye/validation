@@ -9,6 +9,9 @@ use Assegai\Validation\Interfaces\IValidationRule;
  */
 class NumericValidationRule implements IValidationRule
 {
+  public function __construct(protected string $errorMessage = "Input must contain a numeric value.")
+  {
+  }
 
   /**
    * @inheritDoc
@@ -23,6 +26,6 @@ class NumericValidationRule implements IValidationRule
    */
   public function getErrorMessage(): string
   {
-    return "Input must contain a numeric value.";
+    return $this->errorMessage;
   }
 }
