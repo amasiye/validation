@@ -4,12 +4,9 @@ namespace Assegai\Validation\Rules;
 
 use Assegai\Validation\Interfaces\IValidationRule;
 
-/**
- * Check that a field contains a numeric value.
- */
-class NumericValidationRule implements IValidationRule
+class OptionalValidationRule implements IValidationRule
 {
-  public function __construct(protected string $errorMessage = "Input must contain a numeric value.")
+  public function __construct(protected string $errorMessage = 'Input must be empty (=== null)')
   {
   }
 
@@ -18,7 +15,7 @@ class NumericValidationRule implements IValidationRule
    */
   public function passes(mixed $value): bool
   {
-    return is_numeric($value);
+    return is_null($value);
   }
 
   /**
