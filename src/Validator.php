@@ -27,6 +27,9 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 
+/**
+ * Class Validator. This class is used to validate data against a set of rules.
+ */
 class Validator
 {
   /**
@@ -34,8 +37,16 @@ class Validator
    */
   protected array $errors = [];
 
+  /**
+   * @var array|string[] $builtInRules The built-in validation rules.
+   */
   protected readonly array $builtInRules;
 
+  /**
+   * Constructs a new instance of the Validator class.
+   *
+   * @var array|IValidationRule[] $rules The validation rules.
+   */
   public function __construct(protected array $rules = [])
   {
     $this->builtInRules = [
@@ -76,6 +87,8 @@ class Validator
   }
 
   /**
+   * Adds the given validation rules to the validator.
+   *
    * @param array $rules
    * @return void
    */
@@ -164,6 +177,7 @@ class Validator
 
   /**
    * @param string|object $classOrObject
+   * @param array $errors
    * @return bool
    * @throws ReflectionException
    */
@@ -184,6 +198,12 @@ class Validator
     return empty($errors);
   }
 
+  /**
+   * Determines whether the given property has validation attributes.
+   *
+   * @param ReflectionProperty $property The property to check.
+   * @return bool Returns TRUE if the property has validation attributes, otherwise FALSE.
+   */
   protected static function propertyHasValidationAttributes(ReflectionProperty $property): bool
   {
     $attributes = $property->getAttributes();
@@ -199,6 +219,13 @@ class Validator
     return false;
   }
 
+  /**
+   * Validates the given property.
+   *
+   * @param ReflectionProperty $property The property to validate.
+   * @param array $errors The list of errors.
+   * @return bool Returns TRUE if the property passes validation, otherwise FALSE.
+   */
   protected static function propertyPasses(ReflectionProperty $property, array &$errors = []): bool
   {
     $errors = [];
