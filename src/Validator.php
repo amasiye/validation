@@ -94,7 +94,8 @@ class Validator
    */
   public function addAllRules(array $rules): void
   {
-    foreach ($rules as $name => $rule) {
+    foreach ($rules as $name => $rule)
+    {
       $this->addRule($name, $rule);
     }
   }
@@ -114,18 +115,22 @@ class Validator
 
     $ruleString = $rules;
     $rules = explode('|', $rules);
-    foreach ($rules as $rule) {
+    foreach ($rules as $rule)
+    {
       $ruleTokens = explode(':', $rule);
-      if (!$ruleTokens) {
+      if (!$ruleTokens)
+      {
         continue;
       }
       $ruleName = $ruleTokens[0];
       $ruleArgs = (count($ruleTokens) > 1) ? array_slice($ruleTokens, 1) : [];
 
-      if (isset($this->rules[$ruleName])) {
+      if (isset($this->rules[$ruleName]))
+      {
         $ruleToken = $this->rules[$ruleName];
 
-        if (is_subclass_of($ruleToken, IValidationRule::class)) {
+        if (is_subclass_of($ruleToken, IValidationRule::class))
+        {
           $ruleReflection = new ReflectionClass($this->rules[$ruleName]);
           /** @var IValidationRule $ruleInstance */
           $ruleInstance = $ruleReflection->newInstanceArgs($ruleArgs);
@@ -136,8 +141,10 @@ class Validator
     }
 
     /** @var IValidationRule $rule */
-    foreach ($effectiveRules as $field => $rule) {
-      if (!$rule->passes($value)) {
+    foreach ($effectiveRules as $field => $rule)
+    {
+      if (!$rule->passes($value))
+      {
         $this->errors[$field] = $rule->getErrorMessage();
       }
     }
