@@ -35,7 +35,7 @@ use Assegai\Validation\Interfaces\IValidationRule;
 
 class MyCustomValidationRule extends IValidationRule
 {
-  public function validate($value): bool
+  public function passes(mixed $value): bool
   {
     // validate the value
   }
