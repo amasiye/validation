@@ -8,6 +8,7 @@ use Assegai\Validation\Mock\IncompleteValidMockDto;
 use Assegai\Validation\Mock\InvalidMockDto;
 use Assegai\Validation\Mock\ValidMockDto;
 use Assegai\Validation\Validator;
+use ReflectionException;
 use Tests\Support\UnitTester;
 
 class ValidatorCest
@@ -19,6 +20,10 @@ class ValidatorCest
   }
 
   // tests
+
+  /**
+   * @throws ReflectionException
+   */
   public function checkTheValidateMethod(UnitTester $I): void
   {
     $value = 'assegai@gmail.com';
@@ -31,6 +36,9 @@ class ValidatorCest
     $I->assertTrue($this->validator->validate($value, 'maxLength:100'));
   }
 
+  /**
+   * @throws ReflectionException
+   */
   public function checkTheValidateclassMethod(UnitTester $I): void
   {
     $validDto = new ValidMockDto();
@@ -44,6 +52,9 @@ class ValidatorCest
     $I->assertFalse($this->validator->validateClass($incompleteInvalidDto));
   }
 
+  /**
+   * @throws ReflectionException
+   */
   public function checkThePassesMethod(UnitTester $I): void
   {
     $value = 'this is an exceptionally long string';
@@ -51,6 +62,9 @@ class ValidatorCest
     $I->assertTrue($this->validator->passes());
   }
 
+  /**
+   * @throws ReflectionException
+   */
   public function checkTheFailsMethod(UnitTester $I): void
   {
     $value = 'this is an exceptionally long string';
@@ -58,6 +72,9 @@ class ValidatorCest
     $I->assertTrue($this->validator->fails());
   }
 
+  /**
+   * @throws ReflectionException
+   */
   public function checkTheGeterrorsMethod(UnitTester $I): void
   {
     $value = 'this is an exceptionally long string';
