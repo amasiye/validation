@@ -28,6 +28,25 @@ $isValid = $validator->validate($value, 'required|email');
 
 The second argument to the `validate()` method is a string containing the validation rules to apply, separated by the `|` character. In the example above, the required and email rules are applied.
 
+### Create a Validation Rule
+
+```php
+use Assegai\Validation\Interfaces\IValidationRule;
+
+class MyCustomValidationRule extends IValidationRule
+{
+  public function validate($value): bool
+  {
+    // validate the value
+  }
+
+  public function getErrorMessage(): string
+  {
+    return 'The value is invalid.';
+  }
+}
+```
+
 ## Available Rules
 
 This package comes with a number of built-in validation rules, including:
